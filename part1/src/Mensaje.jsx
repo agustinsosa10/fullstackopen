@@ -9,7 +9,7 @@ function Mensaje({ color }) {
   return (
     <div>
       <h1 style={{ color: color }}>
-        {persona[0].name} {persona[0].edad}
+        {persona[0].edad} {persona[0].edad}
         <br />
         {persona[1].name} {persona[1].edad}
       </h1>
