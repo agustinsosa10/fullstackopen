@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import PersonForm from "./components/PersonForm";
 import axios from 'axios'
-import personService from './persons'
+import personService from './service/persons'
 import { use } from "react";
 
 function App() {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState([]);
+  const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
   useEffect( () => {
@@ -15,6 +15,9 @@ function App() {
         .then(initialPersons => {
           console.log('datos obtenidos del servidor', initialPersons)
           setPersons(initialPersons)
+        })
+        .catch(error => {
+          console.error('error obeteniendo datos del servidor', error)
         })
   }, [])
 
@@ -28,8 +31,8 @@ function App() {
     personService
     .create(personObject)
     .then(response => {
-      console.log('Persona creada:', response)
-      const updatePersons = persons.concat(response.data)
+      console.log('APP, datos de la persona:', response)
+      const updatePersons = persons.concat(response)
       setPersons(updatePersons);
       setNewNumber("");
       setNewName("");
@@ -43,8 +46,7 @@ function App() {
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
-  };
-
+  }
 
   return (
     <>
