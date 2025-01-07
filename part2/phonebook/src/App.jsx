@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import PersonForm from "./components/PersonForm";
-import axios from 'axios'
-import personService from './service/persons'
+import personService from "./service/persons";
 import { use } from "react";
+import FilterPersons from "./components/FilterPersons";
 
 function App() {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
-  useEffect( () => {
-        personService
-        .getAll()
-        .then(initialPersons => {
-          console.log('datos obtenidos del servidor', initialPersons)
-          setPersons(initialPersons)
-        })
-        .catch(error => {
-          console.error('error obeteniendo datos del servidor', error)
-        })
-  }, [])
+  useEffect(() => {
+    personService
+      .getAll()
+      .then((initialPersons) => {
+        console.log("datos obtenidos del servidor", initialPersons);
+        setPersons(initialPersons);
+      })
+      .catch((error) => {
+        console.error("error obeteniendo datos del servidor", error);
+      });
+  }, []);
 
   const addName = (event) => {
     event.preventDefault();
@@ -27,16 +27,45 @@ function App() {
       name: newName,
       number: newNumber,
     };
-    
-    personService
-    .create(personObject)
-    .then(response => {
-      console.log('APP, datos de la persona:', response)
-      const updatePersons = persons.concat(response)
-      setPersons(updatePersons);
+
+    const personToUpdate = persons.some( person => person.name === personObject.name)
+    console.log(personToUpdate)
+    if(personToUpdate) {
+      console.log(personToUpdate.id)
+      personService
+      .update(personToUpdate.id, personObject)
+      .then(response => {
+        const personUpdated = persons.
+        setPersons(response)
+      })
+    }
+
+    else {
+    personService.create(personObject).then((response) => {
+      console.log("APP, datos de la persona:", response);
+      const newPersons = persons.concat(response);
+      setPersons(newPersons);
       setNewNumber("");
       setNewName("");
-    })
+    });
+  }
+    
+  };
+
+  const removeName = (id, name) => {
+    const remove = window.confirm(`seguro que quiere eliminar a ${name}`)
+    if(remove) {
+      console.log(remove)
+      console.log(id)
+      personService
+      .remove(id)
+      .then( () => {
+        const personToRemove = persons.filter(person => person.id !== id)
+        console.log(personToRemove)
+        setPersons( personToRemove)
+      })
+      .catch(error => console.error('persona no encontrada', error))
+    }
   };
 
   const handleNameChange = (event) => {
@@ -46,20 +75,22 @@ function App() {
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
-  }
+  };
 
   return (
     <>
-
       <h2>Phonebook</h2>
-      <PersonForm addName={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}
+      <PersonForm
+        addName={addName}
+        newName={newName}
+        newNumber={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
       <div>
-        {persons.map((person, i) => (
-          <p key={i}>
-            {person.name} {person.number}
-          </p>
+        {persons.map((person) => (
+            <FilterPersons key={person.id} person={person} removeName={removeName}/>
         ))}
       </div>
     </>
