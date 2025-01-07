@@ -28,18 +28,26 @@ function App() {
       number: newNumber,
     };
 
-    const personToUpdate = persons.some( person => person.name === personObject.name)
+    const personToUpdate = persons.find( person => person.name === personObject.name)
     console.log(personToUpdate)
     if(personToUpdate) {
-      console.log(personToUpdate.id)
-      personService
-      .update(personToUpdate.id, personObject)
-      .then(response => {
-        const personUpdated = persons.
-        setPersons(response)
-      })
+      const update = window.confirm(`seguro que quiere actualizar los datos de ${personToUpdate.name}`)
+      if(update) {
+        console.log(personToUpdate.id)
+        personService
+        .update(personToUpdate.id, personObject)
+        .then(updatedPerson => {
+          console.log(updatedPerson)
+          setPersons( persons.map( person => person.id === personToUpdate.id ? updatedPerson : person ) )
+          })
+          setNewName("")
+          setNewNumber("")
+      }else {
+        setNewName("")
+        setNewNumber("")
+        return
+      }
     }
-
     else {
     personService.create(personObject).then((response) => {
       console.log("APP, datos de la persona:", response);
