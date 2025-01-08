@@ -3,11 +3,13 @@ import PersonForm from "./components/PersonForm";
 import personService from "./service/persons";
 import { use } from "react";
 import FilterPersons from "./components/FilterPersons";
+import Notification from "./components/Notification";
 
 function App() {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [successfulMessage, setSuccessfulMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -31,7 +33,7 @@ function App() {
     const personToUpdate = persons.find( person => person.name === personObject.name)
     console.log(personToUpdate)
     if(personToUpdate) {
-      const update = window.confirm(`seguro que quiere actualizar los datos de ${personToUpdate.name}`)
+      const update = window.confirm(` ${personToUpdate.name} ya esta en la lista de contactos, seguro que quiere reemplazarlo?`)
       if(update) {
         console.log(personToUpdate.id)
         personService
@@ -39,20 +41,34 @@ function App() {
         .then(updatedPerson => {
           console.log(updatedPerson)
           setPersons( persons.map( person => person.id === personToUpdate.id ? updatedPerson : person ) )
-          })
           setNewName("")
           setNewNumber("")
+          setSuccessfulMessage(`se actualizo correctamente a ${updatedPerson.name}`)
+          setTimeout(() => {
+            setSuccessfulMessage(null)
+          }, 3000)
+          })
+          .catch(error => {
+            console.error('no se pudo actualizar a la persona', error)
+          })
+
       }else {
         setNewName("")
         setNewNumber("")
         return
       }
+      
     }
     else {
     personService.create(personObject).then((response) => {
       console.log("APP, datos de la persona:", response);
       const newPersons = persons.concat(response);
       setPersons(newPersons);
+      console.log(newPersons)
+      setSuccessfulMessage(`se agrego correctamente a ${personObject.name} a la lista de contactos`)
+      setTimeout(() => {
+        setSuccessfulMessage(null)
+      }, 3000)
       setNewNumber("");
       setNewName("");
     });
@@ -87,6 +103,7 @@ function App() {
 
   return (
     <>
+    <Notification message={successfulMessage}/>
       <h2>Phonebook</h2>
       <PersonForm
         addName={addName}
