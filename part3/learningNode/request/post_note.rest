@@ -1,6 +1,16 @@
-POST http://localhost:3001/api/notes
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "content": "que feo es el front"
+    "name": "agustin",
+    "number": "2657241761"
 }
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "content": "puto el que lee"
+}
+
