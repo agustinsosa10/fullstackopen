@@ -36,6 +36,7 @@ function App() {
       const update = window.confirm(` ${personToUpdate.name} ya esta en la lista de contactos, seguro que quiere reemplazarlo?`)
       if(update) {
         console.log(personToUpdate.id)
+        console.log(personObject)
         personService
         .update(personToUpdate.id, personObject)
         .then(updatedPerson => {

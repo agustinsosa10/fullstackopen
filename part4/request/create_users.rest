@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "agustinsosa.10",
+    "name": "agustin",
+    "passwordHash": "12345sad",
+    "blogId" : "67bc0965ee124cca83960eac"
+}

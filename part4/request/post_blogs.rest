@@ -1,9 +1,9 @@
-POST http://localhost:3003/api/blogs
+POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNoZWxpdG8uc29zYSIsImlkIjoiNjdiYmRlNjc4YWVkMWNkNmU3YzFhOGY3IiwiaWF0IjoxNzQwNzgxMzY3fQ.5Zf6lJB1_cvzg-fGhChYmLkH9q12WMo7FWwGOsHwp7o
 
 {
-  "title": "caca",
-  "author": "agustin",
-  "url": "asd",
-  "likes": 23
+  "title": "blog nuevo",
+  "url": "asd.com",
+  "likes": 100
 }

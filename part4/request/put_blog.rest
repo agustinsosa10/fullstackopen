@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/blogs/67a2a406db36c985f2539a0a
+Content-Type: application/json
+
+{
+    "title": "course of",
+    "author": "fullstackopen"
+}
